@@ -26,19 +26,28 @@
 #ifndef __STAR_H__
 #define __STAR_H__
 
+#include <time.h>
+
 
 struct Star
 {
-  char * Name;
+  int    Name;
   double RightAscension;
   double Declination;
+  double Magnitude;
+  double AbsoluteMagnitude;
   double Azimuth;
   double Altitude;
 
 };
 
 void init( struct Star * star, char * name, 
-           double raHours, double raMinutes, double raSeconds, 
-           double dmsHours, double dmsMinutes, double dmsSeconds );
+           double RAHours, double RAMinutes, double RASeconds, 
+           double DMSHours, double DMSMinutes, double DMSSeconds );
+
+void setStarPosition( struct Star * Star, double Latitude, double Longitude, struct tm Time );
+
+void printStar( struct Star * Star );
+
 
 #endif

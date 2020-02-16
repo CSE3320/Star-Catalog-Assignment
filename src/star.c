@@ -22,13 +22,27 @@
 //
 
 #include "star.h"
+#include "utility.h"
 
 
-void initStar( struct Star * star,char * name,
-               double raHours, double raMinutes, double raSeconds, 
-               double dmsHours, double dmsMinutes, double dmsSeconds )
+void initStar( struct Star * Star,char * Name,
+               double RAHours, double RAMinutes, double RASeconds, 
+               double DMSHours, double DMSMinutes, double DMSSeconds )
 {
 
 };
 
+void setStarPosition( struct Star * Star, double Latitude, double Longitude, struct tm Time ) 
+{
+   double JD       = J2000( JulianDate( Time ) );
+   double LST      = getLocalSiderealTime( Longitude, JD );
+   double HA       = getHourAngle( Star->RightAscension, LST );
+   double Altitude = getAltitude( Latitude, Star->Declination, HA );
+   double Azimuth  = getAzimuth( Latitude, Star->Declination, HA );
+};
+
+void printStarPosition( struct Star * Star )
+{
+   //printf("%s Azimuth: %f Altitude: %f\n", Star->Name, Star 
+};
 

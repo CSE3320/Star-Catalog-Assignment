@@ -83,7 +83,7 @@ double J2000( double JD )
     return JD - 2451545.0;
 }
 
-double LST( double lon, double J2000 ) 
+double getLocalSiderealTime( double lon, double J2000 ) 
 {
     time_t rawtime;
     struct tm * timeinfo;
@@ -100,7 +100,7 @@ double LST( double lon, double J2000 )
 }
 
 
-double HourAngle( double RightAscension, double LocalSideRealTime )
+double getHourAngle( double RightAscension, double LocalSideRealTime )
 {
   return ( LocalSideRealTime - RightAscension );
 }

@@ -38,9 +38,9 @@ double JulianDate( struct tm tm_val );
 
 double J2000( double JD );
 
-double LST( double lon, double J2000 );
+double getLocalSiderealTime( double lon, double J2000 );
 
-double HourAngle( double RightAscension, double LocalSideRealTime );
+double getHourAngle( double RightAscension, double LocalSideRealTime );
 
 double getAltitude( double Latitude, double Declination, double HourAngle );
 
