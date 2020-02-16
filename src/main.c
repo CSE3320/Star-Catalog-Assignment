@@ -46,9 +46,11 @@ void showHelp()
   printf("-year       Set the year. 1900 .. \n");
   printf("-hour       Set the hour. 1..24\n");
   printf("-min        Set the minute. 1..60\n");
+  printf("-lon        Set the longitude\n");
+  printf("-lat        Set the latitude\n");
   printf("-h          Show this help\n");
   printf("\nFor example:\n");
-  printf("./bin/StarCatalog -mon 2 -day 17 -year 2020 -hour 21 -min 30 -o 2020Feb17.csv\n");
+  printf("./bin/StarCatalog -mon 2 -day 17 -year 2020 -hour 21 -min 30 -lon -97.5 -o 2020Feb17.csv\n");
 }
 
 
@@ -62,12 +64,16 @@ int main( int argc, char * argv[] )
   int dayFound   = 0;
   int monthFound = 0;
   int yearFound  = 0;
+  int lonFound   = 0;
+  int latFound   = 0;
 
-  int hour  = 0;
-  int min   = 0;
-  int day   = 0;
-  int month = 0;
-  int year  = 0;
+  int hour    = 0;
+  int min     = 0;
+  int day     = 0;
+  int month   = 0;
+  int year    = 0;
+  double lon  = 0;
+  double lat  = 0;
 
   char * outputFile = NULL;
 
@@ -104,6 +110,16 @@ int main( int argc, char * argv[] )
     {
       minFound = 1;
       min = atoi( argv[n+1] );
+    }
+    if( strcmp(argv[n], "-lon" ) == 0 )
+    {
+      lonFound = 1;
+      lon = atoi( argv[n+1] );
+    }
+    if( strcmp(argv[n], "-lat" ) == 0 )
+    {
+      latFound = 1;
+      lat = atoi( argv[n+1] );
     }
     if( strcmp(argv[n], "-o" ) == 0 )
     {
@@ -148,6 +164,20 @@ int main( int argc, char * argv[] )
      exit(0);
   }
 
+  if( !lonFound )   
+  {
+     printf("You must provide the longitude with -lon\n");
+     showHelp();
+     exit(0);
+  }
+
+  if( !latFound )   
+  {
+     printf("You must provide the latitude with -lat\n");
+     showHelp();
+     exit(0);
+  }
+
   fp = fopen("../data/hipparcos.csv", "r");
 
   if (fp == NULL) {
@@ -168,6 +198,28 @@ int main( int argc, char * argv[] )
   fclose(fp);
 
   assert( star_count == NUM_STARS );
+
+  struct tm tm_val;
+  tm_val.tm_hour = hour - 1;
+  tm_val.tm_min  = min - 1;
+  tm_val.tm_sec  = 0;
+
+  struct tm timeinfo = {};
+  timeinfo.tm_year = year - 1900;
+  timeinfo.tm_mon  = month - 1;
+  timeinfo.tm_mday = day;
+
+  mktime(&timeinfo);
+  tm_val.tm_yday   = timeinfo.tm_yday;
+  
+  double LST = getLocalSiderealTime( lon, J2000( JulianDate( tm_val ) ) );
+
+  for( n = 0; n < NUM_STARS; n++ )
+  {
+    double HourAngle = getHourAngle( star_array[n].RightAscension, LST );
+    star_array[n].Altitude = getAltitude( lat, star_array[n].Declination, HourAngle );
+    star_array[n].Azimuth  = getAzimuth ( lat, star_array[n].Declination, HourAngle );
+  }
 
 }
 
