@@ -56,6 +56,9 @@ void showHelp()
 
 int main( int argc, char * argv[] )
 {
+
+  clock_t begin = clock();
+
   FILE *fp;
   size_t star_count = 0;
 
@@ -212,14 +215,50 @@ int main( int argc, char * argv[] )
   mktime(&timeinfo);
   tm_val.tm_yday   = timeinfo.tm_yday;
   
-  double LST = getLocalSiderealTime( lon, J2000( JulianDate( tm_val ) ) );
 
   for( n = 0; n < NUM_STARS; n++ )
   {
+    double LST = getLocalSiderealTime( lon, J2000( JulianDate( tm_val ) ) );
     double HourAngle = getHourAngle( star_array[n].RightAscension, LST );
     star_array[n].Altitude = getAltitude( lat, star_array[n].Declination, HourAngle );
     star_array[n].Azimuth  = getAzimuth ( lat, star_array[n].Declination, HourAngle );
   }
+
+  if( outputFile == NULL )
+  {
+    for( n = 0; n < NUM_STARS; n++ )
+    {
+      printf("Star: %d %lf %lf\n", 
+              star_array[n].Name,    
+              star_array[n].Azimuth ,
+              star_array[n].Altitude );
+    }
+  }
+  else 
+  {
+    FILE *ofp;
+    ofp = fopen( outputFile, "w" );
+
+    if (ofp == NULL) {
+      perror("Error opening output file:\n");
+      return 1;
+    }
+
+    for( n = 0; n < NUM_STARS; n++ )
+    {
+      fprintf(ofp, "Star: %d %lf %lf\n", 
+              star_array[n].Name,    
+              star_array[n].Azimuth ,
+              star_array[n].Altitude );
+    }
+
+    fclose( ofp );
+  }
+
+  clock_t end = clock();
+  double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+  printf("Calculated %d stars in %f seconds\n", NUM_STARS, time_spent );
 
 }
 
