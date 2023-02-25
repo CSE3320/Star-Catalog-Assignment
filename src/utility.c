@@ -23,6 +23,7 @@
 
 #include <time.h>
 #include <math.h>
+#include <stdlib.h>
 
 double hms2deg( double Hours, double Minutes, double Seconds ) 
 {

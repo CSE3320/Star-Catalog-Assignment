@@ -31,23 +31,10 @@
 
 struct Star
 {
-  int    Name;
+  int    ID;
   double RightAscension;
   double Declination;
-  double Magnitude;
-  double AbsoluteMagnitude;
-  double Azimuth;
-  double Altitude;
-
 };
-
-void init( struct Star * star, char * name, 
-           double RAHours, double RAMinutes, double RASeconds, 
-           double DMSHours, double DMSMinutes, double DMSSeconds );
-
-void setStarPosition( struct Star * Star, double Latitude, double Longitude, struct tm Time );
-
-void printStar( struct Star * Star );
 
 
 #endif
