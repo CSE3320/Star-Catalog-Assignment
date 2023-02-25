@@ -30,6 +30,7 @@
 #include <stdint.h>
 #include "utility.h"
 #include "star.h"
+#include "float.h"
 
 #define NUM_STARS 2539913 
 #define MAX_LINE 1024
@@ -44,6 +45,27 @@ void showHelp()
   printf("Where options are:\n");
   printf("-t          Number of threads to use\n");
   printf("-h          Show this help\n");
+}
+
+float determineSmallestAngularDistance( struct Star arr[] )
+{
+    float currentWinner = FLT_MAX;
+
+    int i, j;
+    for (i = 0; i < NUM_STARS - 1; i++)
+    {
+      for (j = 0; j < NUM_STARS - i - 1; j++)
+      {
+        float distance = calculateAngularDistance( arr[i].RightAscension, arr[j].Declination,
+                                                   arr[j].RightAscension, arr[j].Declination ) ;
+
+        if( distance < currentWinner )
+        {
+          currentWinner = distance;                           
+        }
+      }
+    }
+    return currentWinner;
 }
 
 
@@ -106,7 +128,10 @@ int main( int argc, char * argv[] )
   }
   printf("%d records read\n", star_count );
 
-  while(1);
+  // Find the smallest angular distance in the most inefficient way possible
+  double distance =  determineSmallestAngularDistance( star_array );
+  printf("Smallest distance found is %f\n", distance );
+
 
   return 0;
 }

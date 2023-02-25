@@ -28,6 +28,11 @@
 #include <time.h>
 #include <math.h>
 
+#define INT64 52 - 4
+#define INT32 23 - 4
+
+int approxf(double actual, double expected, int bits) ;
+
 double calculateAngularDistance( double a1, double d1, double a2, double d2 );
 
 double hms2deg( double Hours, double Minutes, double Seconds ); 
