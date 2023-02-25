@@ -73,4 +73,10 @@ UTEST( UtilityTests, dms2deg )
   ASSERT_TRUE( approxf( 180.166944, result, INT32 ) );
 }
 
+UTEST( UtilityTests, angularDistance )
+{
+  double result = calculateAngularDistance( 8.70733, 1.484090, 9.94798, 2.447672 );
+  ASSERT_TRUE( approxf( result, 1.570304, INT32 ) );
+}
+
 UTEST_MAIN();

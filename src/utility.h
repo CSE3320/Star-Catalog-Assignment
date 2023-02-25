@@ -28,6 +28,8 @@
 #include <time.h>
 #include <math.h>
 
+double calculateAngularDistance( double a1, double d1, double a2, double d2 );
+
 double hms2deg( double Hours, double Minutes, double Seconds ); 
 
 double dms2deg(double Degrees, double Minutes, double Seconds );
@@ -45,5 +47,6 @@ double getHourAngle( double RightAscension, double LocalSideRealTime );
 double getAltitude( double Latitude, double Declination, double HourAngle );
 
 double getAzimuth( double Latitude, double Declination, double HourAngle );
+
 
 #endif

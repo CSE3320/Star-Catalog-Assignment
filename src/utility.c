@@ -20,10 +20,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#define _USE_MATH_DEFINES 
 
 #include <time.h>
 #include <math.h>
 #include <stdlib.h>
+#include <float.h>
+
+#define degToRad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)
+#define radToDeg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
+
+
+//
+// alpha - Right Ascension
+// delta - Declination
+//
+// returns angular distance in degrees
+//
+double calculateAngularDistance( double a1, double d1, double a2, double d2 )
+{
+  double CosOfAngularDistance = DBL_MAX;
+
+  CosOfAngularDistance = sin( degToRad( d1 ) ) * sin( degToRad( d2 ) ) + 
+                         cos( degToRad( d1 ) ) * cos( degToRad( d2 ) ) * 
+                         cos( degToRad( a1 ) - degToRad( a2 ) ); 
+
+  return radToDeg( acos(  CosOfAngularDistance ) );
+}
 
 double hms2deg( double Hours, double Minutes, double Seconds ) 
 {
@@ -136,3 +159,5 @@ double getAzimuth( double Latitude, double Declination, double HourAngle )
   return( Azimuth * 180.0 / M_PI );
 
 }
+
+
