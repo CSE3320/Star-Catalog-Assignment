@@ -50,10 +50,10 @@ void showHelp()
 // 
 // Embarassingly inefficient, intentionally bad method
 // to calculate all entries one another to determine the
-// smallest angular separation between any two stars 
-float determineSmallestAngularDistance( struct Star arr[] )
+// average angular separation between any two stars 
+float determineAverageAngularDistance( struct Star arr[] )
 {
-    float currentWinner = FLT_MAX;
+    double total = 0;
 
     int i, j;
     for (i = 0; i < NUM_STARS - 1; i++)
@@ -62,13 +62,10 @@ float determineSmallestAngularDistance( struct Star arr[] )
       {
         double distance = calculateAngularDistance( arr[i].RightAscension, arr[j].Declination,
                                                    arr[j].RightAscension, arr[j].Declination ) ;
-        if(distance < currentWinner )
-        {
-          currentWinner = distance;                           
-        }
+        total += distance;
       }
     }
-    return currentWinner;
+    return total / NUM_STARS;
 }
 
 
@@ -133,7 +130,7 @@ int main( int argc, char * argv[] )
   printf("%d records read\n", star_count );
 
   // Find the smallest angular distance in the most inefficient way possible
-  double distance =  determineSmallestAngularDistance( star_array );
+  double distance =  determineAverageAngularDistance( star_array );
   printf("Smallest distance found is %lf\n", distance );
 
   return 0;
