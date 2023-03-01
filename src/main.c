@@ -32,9 +32,9 @@
 #include "star.h"
 #include "float.h"
 
-#define NUM_STARS 2539913 
+#define NUM_STARS 100000 
 #define MAX_LINE 1024
-#define DELIMITER ",\t\n"
+#define DELIMITER " \t\n"
 
 struct Star star_array[ NUM_STARS ];
 
@@ -47,6 +47,10 @@ void showHelp()
   printf("-h          Show this help\n");
 }
 
+// 
+// Embarassingly inefficient, intentionally bad method
+// to calculate all entries one another to determine the
+// smallest angular separation between any two stars 
 float determineSmallestAngularDistance( struct Star arr[] )
 {
     float currentWinner = FLT_MAX;
@@ -56,10 +60,9 @@ float determineSmallestAngularDistance( struct Star arr[] )
     {
       for (j = 0; j < NUM_STARS - i - 1; j++)
       {
-        float distance = calculateAngularDistance( arr[i].RightAscension, arr[j].Declination,
+        double distance = calculateAngularDistance( arr[i].RightAscension, arr[j].Declination,
                                                    arr[j].RightAscension, arr[j].Declination ) ;
-
-        if( distance < currentWinner )
+        if(distance < currentWinner )
         {
           currentWinner = distance;                           
         }
@@ -100,22 +103,22 @@ int main( int argc, char * argv[] )
     uint8_t column = 0;
 
     char* tok;
-    for (tok = strtok(line, ";");
+    for (tok = strtok(line, " ");
             tok && *tok;
-            tok = strtok(NULL, ";\n"))
+            tok = strtok(NULL, " "))
     {
        switch( column )
        {
           case 0:
-              star_array[star_count].ID = atoi(strsep(&tok, DELIMITER));
+              star_array[star_count].ID = atoi(tok);
               break;
        
           case 1:
-              star_array[star_count].RightAscension = atof(strsep(&tok, DELIMITER));
+              star_array[star_count].RightAscension = atof(tok);
               break;
        
           case 2:
-              star_array[star_count].Declination = atof(strsep(&tok, DELIMITER));
+              star_array[star_count].Declination = atof(tok);
               break;
 
           default: 
@@ -123,6 +126,7 @@ int main( int argc, char * argv[] )
              exit(1);
              break;
        }
+       column++;
     }
     star_count++;
   }
@@ -130,8 +134,7 @@ int main( int argc, char * argv[] )
 
   // Find the smallest angular distance in the most inefficient way possible
   double distance =  determineSmallestAngularDistance( star_array );
-  printf("Smallest distance found is %f\n", distance );
-
+  printf("Smallest distance found is %lf\n", distance );
 
   return 0;
 }

@@ -1,5 +1,5 @@
 findAngular: src/main.c src/utility.c unit_tests 
-	gcc src/main.c src/utility.c -o findAngular -lpthread -lm
+	gcc -g src/main.c src/utility.c -o findAngular -lpthread -lm
 	make test
 
 unit_tests: unit-tests/main.c unit-tests/utest.h src/utility.c src/utility.h 
